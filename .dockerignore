@@ -3,4 +3,3 @@ node_modules
 Dockerfile
 npm-debug.log
 .git
-key.json

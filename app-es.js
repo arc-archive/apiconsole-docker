@@ -28,7 +28,8 @@ import { ApiParser } from './lib/parser/index.js';
 const app = express();
 export default app;
 
-const modelFile = 'api-model.js'
+const modelFile = 'api-model.js';
+const modelFileLocation = path.join('/', 'app', modelFile);
 
 app.disable('etag');
 app.disable('x-powered-by');
@@ -64,7 +65,7 @@ app.get('*', (req, res) => {
 if (!modelExists(modelFile)) {
   // TODO: Build model.
   // Until the model is available the www renders LP with "processing" information.
-  const parser = new ApiParser();
+  const parser = new ApiParser(modelFileLocation);
   parser.run();
 }
 
