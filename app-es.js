@@ -21,15 +21,16 @@ import express from 'express';
 import serveStatic from 'serve-static';
 import compression from 'compression';
 import config from './config.js';
-import { requestLogger } from './lib/logging.js';
+import { requestLogger, logger } from './lib/logging.js';
 import { modelExists, modelRoute } from './lib/Utils.js';
 import { ApiParser } from './lib/parser/index.js';
 
 const app = express();
 export default app;
 
-const modelFile = 'api-model.js';
-const modelFileLocation = path.join('/', 'app', modelFile);
+const IS_PRODUCTION = config.get('NODE_ENV') === 'production';
+const modelFile = 'api-model.json';
+const modelFileLocation = IS_PRODUCTION ? path.join('/', 'app', modelFile) : modelFile;
 
 app.disable('etag');
 app.disable('x-powered-by');
@@ -55,6 +56,7 @@ const mainDev = (req, res) => {
 };
 
 app.get('*', (req, res) => {
+  console.log('req.url', req.url);
   if (req.url === `/${modelFile}`) {
     modelRoute(modelFile, res);
     return;
@@ -65,6 +67,7 @@ app.get('*', (req, res) => {
 if (!modelExists(modelFile)) {
   // TODO: Build model.
   // Until the model is available the www renders LP with "processing" information.
+  logger.info(`processing API file: ${modelFileLocation}`);
   const parser = new ApiParser(modelFileLocation);
   parser.run();
 }

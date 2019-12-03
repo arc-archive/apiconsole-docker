@@ -37,26 +37,30 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@advanced-rest-client/oauth-authorization": "^3.0.1",
-    "@advanced-rest-client/xhr-simple-request": "^3.0.1",
     "@advanced-rest-client/eslint-config": "^1.1.1",
+    "@advanced-rest-client/oauth-authorization": "^3.0.1",
     "@advanced-rest-client/prettier-config": "^0.1.0",
+    "@advanced-rest-client/xhr-simple-request": "^3.0.1",
     "@anypoint-web-components/anypoint-button": "^1.0.14",
     "@anypoint-web-components/anypoint-styles": "^1.0.1",
-    "@anypoint-web-components/api-console": "^6.0.0-preview.26",
+    "@anypoint-web-components/api-console": "^6.0.0-preview.30",
+    "@commitlint/config-conventional": "^8.2.0",
     "@open-wc/building-rollup": "^0.12.12",
     "@open-wc/testing": "^2.4.1",
     "@open-wc/testing-karma": "^3.2.5",
     "es-dev-server": "^1.26.1",
-    "eslint": "^6.7.1",
+    "eslint": "^6.7.2",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-wc": "^1.2.0",
     "husky": "^3.1.0",
     "lint-staged": "^9.5.0",
-    "lit-element": "^2.0.1",
+    "lit-element": "^2.2.1",
     "rimraf": "^3.0.0",
     "rollup": "^1.27.5",
     "rollup-plugin-cpy": "^2.0.1",
+    "rollup-plugin-postcss": "^2.0.3",
+    "uglify-js": "^3.7.1",
     "webpack-merge": "^4.1.5"
   },
   "scripts": {
@@ -71,7 +75,8 @@
     "start": "node app.js",
     "build": "rimraf dist && rollup -c rollup.config.js",
     "gke:build": "docker build -t gcr.io/api-console-a6952/standalone-app:$npm_package_version .",
-    "gke:deploy": "docker -- push gcr.io/api-console-a6952/standalone-app:$npm_package_version"
+    "gke:deploy": "docker -- push gcr.io/api-console-a6952/standalone-app:$npm_package_version",
+    "prepare": "node tasks/prepare-vendor.js"
   },
   "lint-staged": {
     "*.js": [

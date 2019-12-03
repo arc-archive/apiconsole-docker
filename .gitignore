@@ -16,12 +16,7 @@ npm-debug.log
 /.tmp/
 
 # build
-/_site/
 /dist/
-/www-dist/
-/demo-dist/
-/docs-dist/
 config.json
-key.json
-certs/
-demo/vendor.js
+vendor.js
+api-model.json
