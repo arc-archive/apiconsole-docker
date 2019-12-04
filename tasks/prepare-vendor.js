@@ -1,5 +1,9 @@
 const UglifyJS = require('uglify-js');
 const fs = require('fs-extra');
+const path = require('path');
+
+const vendorName = 'vendor.js';
+const distPath = path.join('dist', vendorName);
 
 const CryptoFiles = [
   'cryptojslib/components/core.js',
@@ -37,6 +41,14 @@ async function prepareDemo() {
 
   const result = UglifyJS.minify(code);
   await fs.writeFile('vendor.js', result.code, 'utf8');
+
+
+  const exists = await fs.pathExists(distPath);
+  // only updates vendor package when dist already exists.
+  if (exists) {
+    await fs.remove(distPath);
+    await fs.copy(vendorName, distPath);
+  }
 }
 
 prepareDemo();

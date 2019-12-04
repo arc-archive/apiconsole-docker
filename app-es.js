@@ -56,7 +56,6 @@ const mainDev = (req, res) => {
 };
 
 app.get('*', (req, res) => {
-  console.log('req.url', req.url);
   if (req.url === `/${modelFile}`) {
     modelRoute(modelFile, res);
     return;

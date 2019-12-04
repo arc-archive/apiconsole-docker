@@ -9,7 +9,8 @@ nconf
     'API_PROJECT',
     'API_TYPE',
     'API_MIME',
-    'GA_ID'
+    'GA_ID',
+    'PORT'
   ])
   // 3. Config file
   .file({ file: path.join(__dirname, 'config.json') })

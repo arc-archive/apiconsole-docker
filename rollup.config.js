@@ -1,9 +1,9 @@
-import { createDefaultConfig } from '@open-wc/building-rollup';
+import { createCompatibilityConfig } from '@open-wc/building-rollup';
 import path from 'path';
 import postcss from 'rollup-plugin-postcss';
 import cpy from 'rollup-plugin-cpy';
 
-const config = createDefaultConfig({
+const config = createCompatibilityConfig({
   input: path.join(__dirname, 'index.html'),
   indexHTMLPlugin: {
     minify: {
@@ -13,16 +13,23 @@ const config = createDefaultConfig({
   },
 });
 
-config.output.dir = 'dist';
-config.context = 'window';
+config[0].context = 'window';
+config[1].context = 'window';
 
 // console.log(config);
 
 export default [
   {
-    ...config,
+    ...config[0],
     plugins: [
-      ...config.plugins,
+      ...config[0].plugins,
+      postcss()
+    ]
+  },
+  {
+    ...config[1],
+    plugins: [
+      ...config[1].plugins,
       postcss(),
       cpy({
         files: [
