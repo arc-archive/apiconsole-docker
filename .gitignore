@@ -18,5 +18,6 @@ npm-debug.log
 # build
 /dist/
 config.json
+dev-config.json
 vendor.js
 api-model.json

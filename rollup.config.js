@@ -34,6 +34,7 @@ export default [
       cpy({
         files: [
           path.join(__dirname, 'vendor.js'),
+          path.join(__dirname, 'robots.txt'),
         ],
         dest: 'dist',
         options: {

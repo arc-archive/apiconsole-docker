@@ -74,9 +74,10 @@
     "test": "karma start --coverage",
     "test:watch": "karma start --auto-watch=true --single-run=false",
     "start": "node app.js",
+    "start:dev": "NODE_ENV=development node app.js",
     "build": "rimraf dist && rollup -c rollup.config.js",
-    "gke:build": "docker build -t gcr.io/api-console-a6952/standalone-app:$npm_package_version .",
-    "gke:deploy": "docker -- push gcr.io/api-console-a6952/standalone-app:$npm_package_version",
+    "gke:build": "docker build -t gcr.io/api-console-a6952/app:$npm_package_version .",
+    "gke:deploy": "docker -- push gcr.io/api-console-a6952/app:$npm_package_version",
     "prepare": "node tasks/prepare-vendor.js"
   },
   "lint-staged": {
