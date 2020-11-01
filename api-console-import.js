@@ -11,8 +11,5 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import '@anypoint-web-components/api-console/api-console-app.js';
-import '@advanced-rest-client/oauth-authorization/oauth1-authorization.js';
-import '@advanced-rest-client/oauth-authorization/oauth2-authorization.js';
-import '@advanced-rest-client/xhr-simple-request/xhr-simple-request.js';
+import 'api-console/api-console-app.js';
 import './resources/styles/default-styles.css';
