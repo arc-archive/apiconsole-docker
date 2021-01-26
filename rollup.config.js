@@ -1,26 +1,60 @@
-import { createSpaConfig } from '@open-wc/building-rollup';
-import merge from 'deepmerge';
-import path from 'path';
 import cpy from 'rollup-plugin-cpy';
 import postcss from 'rollup-plugin-postcss';
-const baseConfig = createSpaConfig({
-  developmentMode: process.env.ROLLUP_WATCH === 'true',
-  injectServiceWorker: false,
-});
+import { terser } from 'rollup-plugin-terser';
+import html from '@web/rollup-plugin-html';
+import polyfillsLoader from '@web/rollup-plugin-polyfills-loader';
+import nodeResolve from '@rollup/plugin-node-resolve';
+import path from 'path';
 
-export default merge(baseConfig, {
-  input: path.resolve(__dirname, 'index.html'),
+const htmlPlugin = html({ input: path.resolve(__dirname, 'index.html') });
+
+export default {
   context: 'window',
-  output: {
-    sourcemap: false,
-  },
-  plugins: [
-    postcss(),
-    cpy({
-      files: [
-        path.join(__dirname, 'vendor.js'),
-        path.join(__dirname, 'robots.txt'),
+  output: [
+    {
+      format: 'system',
+      chunkFileNames: 'nomodule-[name]-[hash].js',
+      entryFileNames: 'nomodule-[name]-[hash].js',
+      dir: 'dist',
+      // add a legacy build child plugin
+      plugins: [htmlPlugin.api.addOutput('legacy')],
+    },
+    {
+      format: 'es',
+      chunkFileNames: '[name]-[hash].js',
+      entryFileNames: '[name]-[hash].js',
+      dir: 'dist',
+      // add a modern build child plugin
+      plugins: [
+        htmlPlugin.api.addOutput('modern'),
+        terser({
+          format: {
+            comments: false,
+          },
+        }),
       ],
+    },
+  ],
+  plugins: [
+    nodeResolve(),
+    htmlPlugin,
+    postcss(),
+    polyfillsLoader({
+      modernOutput: {
+        name: 'modern',
+      },
+      legacyOutput: {
+        name: 'legacy',
+        test: '!(\'noModule\' in HTMLScriptElement.prototype)',
+      },
+      polyfills: {
+        coreJs: true,
+        fetch: true,
+        webcomponents: true,
+      },
+    }),
+    cpy({
+      files: ['vendor.js', 'robots.txt'],
       dest: 'dist',
       options: {
         parents: false,
@@ -36,55 +70,4 @@ export default merge(baseConfig, {
       },
     }),
   ],
-});
-
-
-
-// const config = createCompatibilityConfig({
-//   input: path.join(__dirname, 'index.html'),
-//   indexHTMLPlugin: {
-//     minify: {
-//       minifyJS: true,
-//       removeComments: true,
-//     },
-//   },
-// });
-
-// config[0].context = 'window';
-// config[1].context = 'window';
-
-// export default [
-//   {
-//     ...config[0],
-//     plugins: [
-//       ...config[0].plugins,
-//       postcss()
-//     ]
-//   },
-//   {
-//     ...config[1],
-//     plugins: [
-//       ...config[1].plugins,
-//       postcss(),
-//       cpy({
-//         files: [
-//           path.join(__dirname, 'vendor.js'),
-//           path.join(__dirname, 'robots.txt'),
-//         ],
-//         dest: 'dist',
-//         options: {
-//           parents: false,
-//         },
-//       }),
-//       cpy({
-//         files: [
-//           path.join('resources', 'styles','*.css')
-//         ],
-//         dest: 'dist',
-//         options: {
-//           parents: true,
-//         },
-//       }),
-//     ],
-//   },
-// ];
+};
