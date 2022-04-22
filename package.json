@@ -30,7 +30,7 @@
     "express": "^4.17.1",
     "express-winston": "^4.0.5",
     "fs-extra": "^9.1.0",
-    "nconf": "^0.11.2",
+    "nconf": "^0.11.4",
     "tmp": "^0.2.1",
     "unzipper": "^0.10.11",
     "uuid": "^8.3.2",
